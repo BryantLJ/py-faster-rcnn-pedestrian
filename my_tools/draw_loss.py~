@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+import matplotlib.pyplot as plt
+with open('LOG.txt.2016-11-24_10-07-40') as f:
+    iter_num = []
+    loss_value = []
+    AUC = []
+    for line in f.readlines():
+        flag1 = line.find(', loss = ')
+        flag2 = line.find('AUC is ')
+        if flag1 != -1:
+            # str[0]:Iteration **, str[1]: loss = **
+            string = line.split(']')[1].split(',')
+            cur1 = string[0].split(' ')[2]
+            cur2 = string[1].split(' ')[3][:-1]
+            iter_num.append(int(cur1))
+            loss_value.append(float(cur2))
+        if flag2 != -1:
+            string = line.split(' ')
+            cur = float(string[2])
+            AUC.append(cur)
+print len(iter_num),len(loss_value)
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+ax1.plot(iter_num,loss_value,'b')
+ax1.set_title('train_loss/val_auc - iteration_num',fontsize=18)
+ax1.set_xlabel('iteration num',fontsize=18)
+ax1.set_ylabel('loss',fontsize=18)
+p1.grid(True)
+
+ax2 = ax1.twinx()
+ax2.plot(iter_num,AUC,'r')
+ax2.set_ylabel('val_auc',fontsize=18)
+
+plt.show()        
